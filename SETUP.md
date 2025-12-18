@@ -370,3 +370,106 @@ Causas:
 ---
 
 **Dica:** Para este projeto, a MainActivity já está corretamente configurada. Você pode abrir `app/src/main/AndroidManifest.xml` para verificar a configuração.
+
+
+## ⚠️ "URI is not registered" Warning (Android Studio XML)
+
+### O que é esse aviso?
+
+Este aviso aparece quando você abre arquivos XML (como `AndroidManifest.xml` ou layouts) no Android Studio:
+
+```
+URI is not registered
+Settings | Languages & Frameworks | Schemas and DTDs
+```
+
+Isso **NÃO é um erro** - é apenas um aviso de que o Android Studio não conseguiu baixar ou registrar o schema XML automaticamente.
+
+### Por que aparece?
+
+- Android Studio não conseguiu conectar à internet para baixar os schemas
+- Os schemas não estão registrados localmente
+- Cache do IDE está desatualizado
+- Problema de conectividade com o servidor Android
+
+### ✅ Soluções
+
+#### **Solução 1: Ignorar o Aviso (Mais Simples)**
+
+Este aviso **não afeta a compilação** do seu app. Você pode simplesmente ignorá-lo.
+- O app vai compilar normalmente ✅
+- Funcionalidades de autocomplete podem ser limitadas
+
+#### **Solução 2: Desabilitar o Aviso no Android Studio**
+
+1. **File** → **Settings** (ou **Android Studio** → **Preferences** no Mac)
+2. **Languages & Frameworks** → **Schemas and DTDs**
+3. Procure pelo URI problemático (ex: `http://schemas.android.com/apk/res/android`)
+4. Clique nele e mude o status de **Available** para **Ignored**
+5. Clique **OK**
+
+#### **Solução 3: Sincronizar Android SDK**
+
+1. **File** → **Sync Now**
+2. Aguarde completar
+3. **Tools** → **SDK Manager**
+4. Verifique se tem as versões corretas
+5. Aplique atualizações se necessário
+
+#### **Solução 4: Limpar Cache do IDE**
+
+1. **File** → **Invalidate Caches / Clear Cached Data**
+2. Marque **"Clear Cached Data and Restart"**
+3. Clique **OK**
+4. Android Studio vai reiniciar
+
+#### **Solução 5: Registrar Schema Manualmente**
+
+1. **File** → **Settings** → **Languages & Frameworks** → **Schemas and DTDs**
+2. Clique no **+** (Add)
+3. Preencha:
+   - **URI**: `http://schemas.android.com/apk/res/android`
+   - **Local Path**: `{ANDROID_SDK}/platforms/android-34/data/res/values/` (ou sua versão)
+4. Clique **OK**
+
+#### **Solução 6: Download Manual dos Schemas**
+
+Baixe offline e adicione ao Android Studio:
+
+```bash
+# Caminho no Windows:
+C:\Users\{usuario}\.android\schema\schemas.android.com\apk\res\android
+
+# Caminho no Mac/Linux:
+~/.android/schema/schemas.android.com/apk/res/android
+```
+
+### ℹ️ Para Este Projeto
+
+Se você ver este aviso ao abrir `app/src/main/AndroidManifest.xml`:
+- ✅ Seu app vai compilar normalmente
+- ✅ Não interfere com a build
+- ✅ É apenas um aviso do editor
+
+### 🚀 Recomendação Final
+
+**Solução 2 (desabilitar o aviso) é a mais prática.** Depois disso:
+
+```bash
+# Build e execute normalmente
+./gradlew assembleDebug
+./gradlew installDebug
+```
+
+### Checklist de Verificação
+
+- [ ] App compila sem erros: `./gradlew build`
+- [ ] Sem erros no logcat
+- [ ] App executa no emulador/dispositivo
+- [ ] Funcionalidades funcionam
+
+**Se tudo funciona, o aviso pode ser ignorado com segurança!** ✅
+
+---
+
+**Nota:** Este é um problema comum no Android Studio e não indica nenhum problema com seu código.
