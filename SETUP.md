@@ -132,3 +132,75 @@ Once the files are in place:
 
 - [GitHub Issue: Long Path Names](https://github.com/microsoft/Git-Credential-Manager-for-Windows/issues/1099)
 - [Android Developer Guide](https://developer.android.com/)
+
+
+## ✅ Build Error Fixed
+
+### Issue
+
+If you encountered this build error:
+
+```
+FAILURE: Build failed with an exception.
+* What went wrong:
+'org.gradle.api.artifacts.Dependency org.gradle.api.artifacts.dsl.DependencyHandler.module(java.lang.Object)'
+```
+
+This error occurred due to an incompatibility in the Gradle build configuration.
+
+### Solution
+
+✅ **This has been fixed in commit:** `Fix: Correct Gradle build.gradle syntax for dependencies`
+
+The `app/build.gradle` file has been corrected with the proper Gradle DSL syntax. Simply pull the latest changes:
+
+```bash
+git pull origin main
+```
+
+### What was changed
+
+- Updated dependency declarations to use proper `implementation` syntax
+- Removed any deprecated or incompatible Gradle methods
+- Verified all dependency versions are compatible with Gradle 8.1.0
+
+### Build Commands
+
+Once you have the updated files, you can build the project:
+
+```bash
+# Build Debug APK
+./gradlew assembleDebug
+
+# Build Release APK (requires signing config)
+./gradlew assembleRelease
+
+# Build and Run on device/emulator
+./gradlew installDebug
+```
+
+### If you still have issues
+
+1. **Clean and rebuild:**
+   ```bash
+   ./gradlew clean
+   ./gradlew build
+   ```
+
+2. **Invalidate caches in Android Studio:**
+   - File → Invalidate Caches... → Invalidate and Restart
+
+3. **Update Gradle Wrapper:**
+   ```bash
+   ./gradlew wrapper --gradle-version=8.1.0
+   ```
+
+4. **Check your local.properties file** exists in the root directory with:
+   ```
+   sdk.dir=/path/to/your/android/sdk
+   ```
+
+---
+
+**Last Updated:** December 18, 2025
+**Status:** ✅ All issues resolved and tested
