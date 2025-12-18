@@ -473,3 +473,38 @@ Se você ver este aviso ao abrir `app/src/main/AndroidManifest.xml`:
 ---
 
 **Nota:** Este é um problema comum no Android Studio e não indica nenhum problema com seu código.
+
+
+## 🔴 NoSuchMethodError: 'module()' (AGP Issue)
+
+### Resumo Rápido
+
+Este erro vem do **Android Gradle Plugin (AGP)** tentando usar um método que não existe. Causa: **Versões incompatíveis do Gradle + AGP**.
+
+### ✅ Solução em 3 Passos
+
+**1. Atualizar build.gradle (raiz):**
+```gradle
+plugins {
+    id 'com.android.application' version '8.1.0' apply false
+    id 'com.android.library' version '8.1.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.0' apply false
+}
+```
+
+**2. Atualizar Gradle:**
+```bash
+./gradlew wrapper --gradle-version=8.1.0
+```
+
+**3. Limpar e Rebuild:**
+```bash
+rm -rf .gradle/ build/ app/build/
+./gradlew clean build
+```
+
+### 📋 Versões Compatíveis
+
+- AGP 8.1.0 + Gradle 8.1.0 ✅
+- AGP 8.0.x + Gradle 8.0.x ✅
+- AGP 7.4.x + Gradle 7.6.x ✅
