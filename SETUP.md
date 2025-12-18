@@ -204,3 +204,169 @@ Once you have the updated files, you can build the project:
 
 **Last Updated:** December 18, 2025
 **Status:** ✅ All issues resolved and tested
+
+
+## 🎯 Configurando a Main Class no Android Studio
+
+### O que é Main Class em Android?
+
+Em Android, a "main class" é a **Activity** que será lançada quando o usuário abrir o aplicativo. Por padrão, esta é definida como **MainActivity**.
+
+### Como Definir a Main Class
+
+#### Método 1: Via AndroidManifest.xml (Recomendado)
+
+A main class é definida no arquivo `AndroidManifest.xml` através da tag `<intent-filter>` com a ação `MAIN`:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application>
+        <!-- Sua Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SimplesCalc">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Outras Activities (sem MAIN intent-filter) -->
+        <activity
+            android:name=".OtherActivity"
+            android:exported="false" />
+    </application>
+
+</manifest>
+```
+
+**Pontos-chave:**
+- `<action android:name="android.intent.action.MAIN" />` - Define como activity principal
+- `<category android:name="android.intent.category.LAUNCHER" />` - Faz o app aparecer na launcher
+- `android:exported="true"` - Obrigatório para a main activity
+- O nome da classe é relativo ao `<manifest package>`
+
+#### Método 2: Via Android Studio GUI
+
+1. **Abrir Android Studio**
+2. **Abrir AndroidManifest.xml**
+3. **Mudar para a aba "Design"** (inferior esquerda)
+4. **Selecionar a Activity** no painel
+5. **No painel "Attributes"**, verificar se está com:
+   - `Action`: MAIN
+   - `Category`: LAUNCHER
+
+#### Método 3: Alterando a Main Activity
+
+Se quiser que **SuaNovaActivity** seja a main class:
+
+1. **Remova o intent-filter da MainActivity:**
+   ```xml
+   <activity
+       android:name=".MainActivity"
+       android:exported="false" />
+   ```
+
+2. **Adicione o intent-filter na nova activity:**
+   ```xml
+   <activity
+       android:name=".SuaNovaActivity"
+       android:exported="true"
+       android:theme="@style/Theme.SimplesCalc">
+       <intent-filter>
+           <action android:name="android.intent.action.MAIN" />
+           <category android:name="android.intent.category.LAUNCHER" />
+       </intent-filter>
+   </activity>
+   ```
+
+### Para Este Projeto (Simples Calc)
+
+A main class já está configurada em `AndroidManifest.xml`:
+
+```xml
+<activity
+    android:name=".MainActivity"
+    android:exported="true"
+    android:theme="@style/Theme.SimplesCalc">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity>
+```
+
+Portanto, **MainActivity** é a classe principal que será executada ao abrir o app.
+
+### Verificação de Configuração no Build
+
+#### No build.gradle
+
+Você **não define** a main class diretamente no `build.gradle`. A declaração está sempre no `AndroidManifest.xml`. Porém, no `build.gradle` você pode configurar:
+
+```gradle
+android {
+    namespace 'com.example.simplescalc'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.simplescalc"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+    // ...
+}
+```
+
+Note que `applicationId` no `build.gradle` deve corresponder ao `package` no `AndroidManifest.xml`.
+
+### Problemas Comuns
+
+#### ❌ "Activity not found"
+Causas:
+- Activity não está declarada no AndroidManifest.xml
+- Nome do package não corresponde entre AndroidManifest.xml e build.gradle
+- intent-filter MAIN/LAUNCHER não está configurado
+
+**Solução:**
+```bash
+# Verificar AndroidManifest.xml
+cat app/src/main/AndroidManifest.xml
+
+# Verificar build.gradle
+cat app/build.gradle | grep -A5 'defaultConfig'
+```
+
+#### ❌ "Activity names must be fully qualified"
+Causas:
+- Nome da activity não está completo no `android:name`
+
+**Solução:**
+```xml
+<!-- ❌ Incorreto -->
+<activity android:name="MainActivity" />
+
+<!-- ✅ Correto -->
+<activity android:name=".MainActivity" />
+<!-- ou -->
+<activity android:name="com.example.simplescalc.MainActivity" />
+```
+
+### Resumo Rápido
+
+| Aspecto | Localização | Exemplo |
+|--------|-------------|----------|
+| Main Class | AndroidManifest.xml | `.MainActivity` |
+| Intent Filter | AndroidManifest.xml | `android:action=MAIN` |
+| Package Name | build.gradle | `com.example.simplescalc` |
+| Package Name | AndroidManifest.xml | `package="com.example.simplescalc"` |
+
+---
+
+**Dica:** Para este projeto, a MainActivity já está corretamente configurada. Você pode abrir `app/src/main/AndroidManifest.xml` para verificar a configuração.
